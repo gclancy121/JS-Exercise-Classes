@@ -42,8 +42,31 @@ class Airplane {
 */
 
 class Person {
-  
+  constructor (name, age) {
+    this.name=name;
+    this.age=age;
+    this.stomach=[];
+  } 
+  eat(food) {
+    if (this.stomach.length < 10) {
+      this.stomach.push(food);
+      return this.stomach;
+    } else {
+      return "i'm too full to eat!"
+    }
+  };
+  poop() {
+    this.stomach=[];
+    return "freshly emptied"
+  };
+  toString() {
+    return `${this.name}, ${this.age}`
+  }
 }
+
+const gage = new Person ('gage', 20);
+console.log('task 1', gage, gage.eat('burrito'));
+
 
 /*
   TASK 2
@@ -60,8 +83,33 @@ class Person {
 */
 
 class Car {
-  
+  constructor(model,milesPerGallon) {
+    this.model=model;
+    this.milesPerGallon=milesPerGallon;
+    this.tank=0;
+    this.odometer=0;
+  }
+  fill(gallons) {
+    this.tank=this.tank+gallons;
+    return this.tank;
+  }
+  drive(distance) {
+    const driveableMiles=this.milesPerGallon*this.tank;
+    if (distance <= driveableMiles) {
+      this.odometer=this.odometer+distance;
+      this.tank= this.tank-(distance/this.milesPerGallon);
+    } else {
+      this.odometer=this.odometer+driveableMiles;
+      this.tank=0;
+      return `I ran out of fuel at ${this.odometer} miles!`;
+    }
+   
+  }
 }
+
+const car = new Car("Nissan Altima", 27);
+
+console.log('task 2', car.fill(16), car.drive(135));
 
 /*
   TASK 3
@@ -76,8 +124,18 @@ class Car {
         + {name} and {location} of course come from the instance's own properties.
 */
 class Lambdasian {
-  
+  constructor (props) {
+    this.name=props.name;
+    this.age=props.age;
+    this.location=props.location;
+  } 
+  speak () {
+    return `Hello my name is ${this.name}, I am from ${this.location}.`
+  }
 }
+
+const me=new Lambdasian ({name: 'Gage', age: 20, location: 'Missouri'})
+console.log('task 3', me.speak());
 
 /*
   TASK 4
@@ -93,9 +151,22 @@ class Lambdasian {
         + `demo` receives a `subject` string as an argument and returns the phrase 'Today we are learning about {subject}' where subject is the param passed in.
         + `grade` receives a `student` object and a `subject` string as arguments and returns '{student.name} receives a perfect score on {subject}'
 */
-class Instructor {
+class Instructor extends Lambdasian {
+  constructor (props) {
+    super(props)
+    this.specialty=props.specialty;
+    this.favLanguage=props.favLanguage;
+    this.catchPhrase=props.catchPhrase;
+  }
+  demo(subject) {
+    return `Today we are learning about ${subject}`
+  }
+  grade(studentName,subject) {
+    return `${studentName} receives a perfect score on ${subject}`
+  }
 
 }
+
 /*
   TASK 5
     - Write a Student class extending Lambdasian.
@@ -111,7 +182,22 @@ class Instructor {
         + `PRAssignment` a method that receives a subject as an argument and returns `student.name has submitted a PR for {subject}`
         + `sprintChallenge` similar to PRAssignment but returns `student.name has begun sprint challenge on {subject}`
 */
-class Student {
+class Student extends Lambdasian{
+  constructor (props) {
+    super(props)
+    this.previousBackground=props.previousBackground;
+    this.className=props.className;
+    this.favSubjects=props.favSubjects;
+  }
+  listSubjects() {
+    return `Loving ${this.favSubjects}!`;
+  }
+  PRAssignment(subject) {
+    return `${this.name} has submitted a PR for ${subject}`;
+  }
+  sprintChallenge(subject) {
+    return `${this.name} has begun a sprint challenge on ${subject}`;
+  }
    
 }
 
@@ -128,9 +214,20 @@ class Student {
         + `standUp` a method that takes in a slack channel and returns `{name} announces to {channel}, @channel standy times!`
         + `debugsCode` a method that takes in a student object and a subject and returns `{name} debugs {student.name}'s code on {subject}`
 */
-class ProjectManager {
-   
+class ProjectManager extends Instructor{
+  constructor (props) {
+    super(props) 
+    this.gradClassName=props.gradClassName;
+    this.favInstructor=props.favInstructor;
+  }  
+  standUp(channelName) {
+    return `${this.name} announces to ${channelName}, @channel standby times!`;
+  }
+  debugsCode(student,subject) {
+    return `${this.name} debugs ${student.name}'s code on ${subject}`;
+  }
 }
+
 /*
   STRETCH PROBLEM (no tests!)
     - Extend the functionality of the Student by adding a prop called grade and setting it equal to a number between 1-100.
